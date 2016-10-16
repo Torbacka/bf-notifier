@@ -19,16 +19,19 @@ def parseAdPage(url):
     html = reponse.read()
     soup = BeautifulSoup(html, 'html.parser')
     allCharacteristics = soup.find_all('div', class_="egenskap")
-    ret = []
+    ret = dict()
     for characteristics in allCharacteristics:
         n = characteristics.find('div', attrs={'class': 'n'})
         v = characteristics.find('div', attrs={'class': 'v'})
-        ret.append(n.text.strip() + v.text.strip())
+        if(n != None):
+            key = n.text.strip()[:-1]
+            ret[key] = v.text.strip()
 
     statisticSoup = soup.find("div", {"id": "statistik-box"})
     queueTimes = statisticSoup.find_all('strong')
-    i = 1
+
+    queue = []
     for queueTimes in queueTimes:
-        ret.append("Queue"+str(i)+":"+queueTimes.text)
-        i+=1
+        queue.append(queueTimes.text)
+    ret["queue"] = queue
     return ret
