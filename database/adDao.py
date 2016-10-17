@@ -1,12 +1,10 @@
 import pymysql
 import pymysql.cursors
-import base64
+
 
 # insert an ad to the database
-
-
 def insertAd(ad):
-    conn = pymysql.connect(
+    database = pymysql.connect(
         host='127.0.0.1',
         user='root',
         passwd='',
@@ -14,28 +12,36 @@ def insertAd(ad):
         autocommit=True
     )
 
-    cur = conn.cursor()
-    sql = ('INSERT INTO housingads(id,adress,type,publishDate, expireDate,price, rooms, livingSpace, webpage) VALUES (%s, %s, %s, %s,%s, %s, %s, %s,%s)')
+    cursor = database.cursor()
+    sql = (
+        'INSERT IGNORE INTO housingads(id,adress,type,publishDate, expireDate,price, rooms, livingSpace, webpage) VALUES' +
+        ' (%s, %s, %s, %s,%s, %s, %s, %s,%s)')
     if "Lägenhetsnummer" in ad:
-        id = ad['Lägenhetsnummer']+"ö"
+        id = ad['Lägenhetsnummer']
     else:
-        data = ad['Gatuadress'] + ":" + ad['Antal rum']
+        id = ad['Gatuadress'] + ":" + ad['Antal rum']
 
-        id = base64.standard_b64encode(bytes(data,'UTF-8'))
+    cursor.execute(sql, (
+        id, ad['Gatuadress'], ad['Type'], ad['Annons publicerad'], ad['Anmälan senast'],
+        ad['Hyra'], ad['Antal rum'], ad['Yta'], ad['Page']))
 
-    cur.execute(sql,(
-        id, ad['Gatuadress'] ,"Test" , ad['Annons publicerad'] , ad[
-            'Anmälan senast'], ad['Hyra'] , ad['Antal rum'],ad['Yta'] ,"test"))
+    # Update or insert queuetime depeding of value already exisit
+    sql = 'SELECT * FROM queuetime WHERE housingAdID=%s'
+    cursor.execute(sql, id)
+    queue = ad['Queue']
+    queue.sort()
+    if cursor.rowcount > 0:
+        i = 0
+        for data in cursor:
+            sql = 'UPDATE queuetime SET queueDate=%s WHERE id=%s'
+            cursor.execute(sql,(queue[i],data[0]))
+            i += 1
+    else :
+        sql = 'INSERT INTO queuetime (housingAdID, queueDate) VALUES (%s, %s)'
+        for date in queue:
+            cursor.execute(sql, (id, date))
 
-    #id = conn.insert_id()
-    cur = conn.cursor()
-    sql = ('INSERT INTO queuetime(housingAdID, queueDate) VALUES (%s, %s)')
-    queue = ad['queue']
-    print(id)
-    for date in queue:
-        cur.execute(sql, (id, date))
-
-    conn.close()
+    database.close()
 
 
 def retrieveAll():
