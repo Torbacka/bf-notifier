@@ -8,3 +8,8 @@ This Python script checks if https://bostad.stockholm.se/ contains any new ads a
 
 
 All ads are being stored to a database.
+
+###Dependencies
+
+*Flask
+*PyMysql
