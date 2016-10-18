@@ -11,5 +11,5 @@ All ads are being stored to a database.
 
 ###Dependencies
 
-*Flask
-*PyMysql
+* Flask
+* PyMysql
