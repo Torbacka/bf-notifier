@@ -9,6 +9,7 @@ def insertAd(ad):
         user='root',
         passwd='',
         db='bfNotifier',
+        charset='utf8',
         autocommit=True
     )
 
