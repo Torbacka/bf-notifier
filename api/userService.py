@@ -10,9 +10,14 @@ def getAllAds(user):
     return jsonify('test')
 
 #TODO post method to add one user
-
+@user.route('/v1/user/', methods=['POST'])
+def addUser():
+    return jsonify('post user')
 
 #TODO patch method to update/modify one user
+@user.route('/v1/user/', methods=['PATCH'])
+def updateUser():
+    return jsonify('patch user')
 
 if __name__ == '__main__':
     print("hej")

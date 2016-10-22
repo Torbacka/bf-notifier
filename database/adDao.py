@@ -46,8 +46,22 @@ def insertAd(ad):
 
 
 def retrieveAll():
-    print("TODO")
-
+    ##Just for test will be removed later when Atila commits
+    database = pymysql.connect(
+        host='127.0.0.1',
+        user='root',
+        passwd='',
+        db='bfNotifier',
+        charset='utf8',
+        autocommit=True
+    )
+    cursor = database.cursor(pymysql.cursors.DictCursor)
+    sql = 'SELECT * FROM housingads'
+    cursor.execute(sql)
+    ads = []
+    for data in cursor:
+        ads.append(data)
+    return ads
 
 def retrieveInterval(date1, date2):
     print("TODO")
