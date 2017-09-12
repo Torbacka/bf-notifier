@@ -7,7 +7,7 @@ Getting an apartment from bostadsförmedlingen (bf) is a pain in the ass. After 
 This Python script checks if https://bostad.stockholm.se/ contains any new ads and notifies you via email.
 
 
-All ads are being stored to a database.
+All ads are being stored in a database.
 
 ### Dependencies
 
