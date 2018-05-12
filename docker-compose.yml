@@ -1,4 +1,5 @@
 version: '3'
+services:
   crawler:
     build: .
     environment:
@@ -15,7 +16,7 @@ version: '3'
       - MONGO_DATA_DIR=/data/db
       - MONGO_LOG_DIR=/dev/null
     volumes:
-      - ./data/db:/data/db
+      - ./docker/mongo/data/db:/data/db:z
     ports:
         - 27017:27017
     command: mongod --smallfiles --logpath=/dev/null # --quiet
