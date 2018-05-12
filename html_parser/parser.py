@@ -1,4 +1,4 @@
-from urllib.request import urlopen
+from urllib2 import urlopen
 from bs4 import BeautifulSoup
 #parse bostad.stockholm.se/List page and returning a data structure containing all the links to ad page
 def parseListPage(url):
