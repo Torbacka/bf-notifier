@@ -3,11 +3,11 @@ from database import adDao
 
 def main():
    # print("html_parser")
-    adUrls = parser.parseListPage("https://bostad.stockholm.se/Lista")
+    adUrls = parser.parseListPage("https://bostad.stockholm.se/Lista/AllaAnnonser")
     print(len(adUrls))
 
     for url in adUrls:
-        ad = parser.parseAdPage(url)
+        ad = parser.parseAdPage(url['Url'])
         print(ad)
         adDao.insertAd(ad)
         # if new ad send email
