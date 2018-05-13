@@ -1,16 +1,15 @@
 from html_parser import parser
 from database import adDao
 
-def main():
-   # print("html_parser")
-    adUrls = parser.parseListPage("https://bostad.stockholm.se/Lista/AllaAnnonser")
-    print(len(adUrls))
 
-    for url in adUrls:
-        ad = parser.parseAdPage(url['Url'])
+def main():
+    # print("html_parser")
+    ads = parser.parseListPage()
+    print(len(ads))
+    for ad in ads:
+        ad = parser.parseAdPage(ad, ad['Url'])
         print(ad)
         adDao.insertAd(ad)
-        # if new ad send email
 
 
 if __name__ == "__main__":
