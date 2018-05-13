@@ -1,10 +1,8 @@
 from pymongo import MongoClient
 
-client = MongoClient('example.com',
-                           username='user',
-                           password='password',
-                           authSource='the_database',
-                           authMechanism='SCRAM-SHA-1')
+client = MongoClient('mongodb://mongodb:27017',
+                           username='root',
+                           password='root')
 
 def insertAd(ad):
     collection = client['bfNotifier']['ads']
