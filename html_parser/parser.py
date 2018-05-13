@@ -4,9 +4,9 @@ from bs4 import BeautifulSoup
 
 
 # parse bostad.stockholm.se/List page and returning a data structure containing all the links to ad page
-def parseListPage(url):
-    reponse = urlopen(url)
-    data = reponse.read()
+def parseListPage():
+    response = urlopen("https://bostad.stockholm.se/Lista/AllaAnnonser")
+    data = response.read()
     jsonData = json.loads(data)
     return jsonData
 
@@ -15,8 +15,8 @@ def parseListPage(url):
 # queue time, type of ad, publish date, expire date, price, location, rent, number of rooms, living space
 def parseAdPage(url):
     url = "https://bostad.stockholm.se" + url
-    reponse = urlopen(url)
-    html = reponse.read()
+    response = urlopen(url)
+    html = response.read()
     soup = BeautifulSoup(html, 'html.parser')
     allCharacteristics = soup.find_all('div', class_="egenskap")
     ret = dict()
@@ -24,7 +24,7 @@ def parseAdPage(url):
     for characteristics in allCharacteristics:
         n = characteristics.find('div', attrs={'class': 'n'})
         v = characteristics.find('div', attrs={'class': 'v'})
-        if (n != None):
+        if n is not None:
             key = n.text.strip()[:-1]
             ret[key] = v.text.strip()
 
@@ -36,7 +36,7 @@ def parseAdPage(url):
         queue.append(queueTimes.text)
     ret["Queue"] = queue
     type = soup.find("span", attrs={'class': 'm-tag'})
-    if type != None:
+    if type is not None:
         ret['Type'] = type.text
     else:
         ret['Type'] = ""
