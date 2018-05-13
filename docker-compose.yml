@@ -10,13 +10,8 @@ services:
     depends_on:
       - mongodb
   mongodb:
-    image: mongo:latest
-    container_name: "mongodb"
+    image: tutum/mongodb:3.2
     environment:
-      - MONGO_DATA_DIR=/data/db
-      - MONGO_LOG_DIR=/dev/null
-    volumes:
-      - ./docker/mongo/data/db:/data/db:z
-    ports:
-        - 27017:27017
-    command: mongod --smallfiles --logpath=/dev/null # --quiet
+      MONGODB_USER: root
+      MONGODB_PASS: root
+      MONGODB_DATABASE: bfNotifier
