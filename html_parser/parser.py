@@ -15,6 +15,7 @@ def parseListPage():
 # parse ad page and returning a data structure containing information about the ad
 # queue time, type of ad, publish date, expire date, price, location, rent, number of rooms, living space
 def parseAdPage(ret, url):
+    ret = updateJson(ret)
     url = "https://bostad.stockholm.se" + url
     response = urlopen(url)
     html = response.read()
@@ -41,6 +42,12 @@ def parseAdPage(ret, url):
     else:
         ret['Type'] = ""
     return ret
+
+
+def updateJson(json):
+    json['AnnonseradTill'] = datetime.strptime(json['AnnonseradTill'], '%Y-%m-%d')
+    json['AnnonseradFran'] = datetime.strptime(json['AnnonseradFran'], '%Y-%m-%d')
+    return json
 
 
 def parseValue(key, value):
