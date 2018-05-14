@@ -1,6 +1,6 @@
 import json
 from datetime import datetime
-from urllib2 import urlopen
+from urllib.request import urlopen
 from bs4 import BeautifulSoup
 
 
@@ -51,5 +51,4 @@ def parseValue(key, value):
 
 
 def fixKey(key):
-    print(key.text.strip()[:-1].title().replace(" ", ""))
     return key.text.strip()[:-1].title().replace(" ", "")
