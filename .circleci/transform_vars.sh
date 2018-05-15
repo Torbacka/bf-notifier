@@ -1,0 +1,3 @@
+echo Loading envvars...
+export ZENS_NAME=$CIRCLE_PROJECT_REPONAME TAG=$CIRCLE_SHA1
+export HELM_NAME=$(echo ${ZENS_NAME}|tr "_" "-")

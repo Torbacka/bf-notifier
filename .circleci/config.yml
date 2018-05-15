@@ -1,0 +1,79 @@
+version: 2
+jobs:
+
+  docker-build:
+      docker:
+        - image: docker:17.07.0   # (1)
+      working_directory: ~/workdir
+      steps:
+        - checkout
+        - setup_remote_docker
+        - run: chmod -v +x .circleci/*.sh
+        - run: sh .circleci/docker-build.sh
+        - persist_to_workspace:
+            root: /tmp/workspace/
+            paths:
+              - latest
+
+
+  gcloud-deploy:
+    docker:
+      - image: google/cloud-sdk:167.0.0
+        environment:
+          PROJECT_NAME: zens-main
+          CLUSTER_NAME: dev-play
+          CLOUDSDK_COMPUTE_ZONE: europe-west1-d
+          DEBIAN_FRONTEND: noninteractive
+    working_directory: ~/workdir
+    steps:
+      - checkout
+      - setup_remote_docker
+      - deploy:
+          name: Install Docker client
+          command: |
+            set -x
+            VER="17.06.1-ce"
+            curl -L -o /tmp/docker-$VER.tgz https://download.docker.com/linux/static/stable/x86_64/docker-$VER.tgz
+            tar -xz -C /tmp -f /tmp/docker-$VER.tgz
+            mv /tmp/docker/* /usr/bin
+      - attach_workspace:
+          at: /tmp/workspace
+      - run: bash .circleci/gcloud-deploy.sh
+
+  docker-deploy:
+    docker:
+      - image: docker:17.07.0   # (1)
+    working_directory: ~/workdir
+    steps:
+      - setup_remote_docker
+      - attach_workspace:
+          at: /tmp/workspace
+      - run:
+        name: "Load saved image"
+        command: |
+          cd test
+          docker load -i /tmp/workspace/latest
+
+      - deploy:
+          command: |
+            TAG=$CIRCLE_SHA1
+            docker login -u $HUB_USERNAME -p $HUB_PASSWORD
+            docker push zensum/$ZENS_NAME:$TAG
+            docker push zensum/$ZENS_NAME:latest
+
+workflows:
+  version: 2
+  build_and_deploy:
+    jobs:
+      - docker-build:
+          context: org-global
+          filters:
+            branches:
+              only: master
+      - gcloud-deploy:
+          context: org-global
+          requires:
+            - docker-build
+          filters:
+            branches:
+              only: master
