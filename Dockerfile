@@ -1,4 +1,4 @@
 FROM python:3
 ADD . /bfNotifier
-RUN pip install pymongo BeautifulSoup urlopen
-CMD [ "python", "./bfNotifier/crawler.py" ]
+RUN pip3 install -r ./bfNotifier/requirements.txt
+CMD [ "python3", "./bfNotifier/crawler.py" ]
