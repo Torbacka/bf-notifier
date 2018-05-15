@@ -3,8 +3,8 @@ services:
   crawler:
     build: .
     environment:
-      - NODE_ENV=development
-      - FOO=bar
+      - USERNAME=root
+      - PASSWORD=root
     links:
       - mongodb
     depends_on:
