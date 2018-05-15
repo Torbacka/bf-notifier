@@ -1,8 +1,13 @@
+import os
+
 from pymongo import MongoClient
 
+username = os.getenv('USERNAME')
+password = os.getenv('PASSWORD')
+
 client = MongoClient('mongodb://mongodb:27017',
-                     username='root',
-                     password='root')
+                     username=username,
+                     password=password)
 
 
 def insertAd(ad):
