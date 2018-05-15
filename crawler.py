@@ -15,6 +15,7 @@ def addOldAds(i):
     ad = parser.parseAdPage(dict(), "Lista/Details/?aid=" + i)
     adDao.insertAd(ad)
 
+
 def addAds(ad):
     ad = parser.parseAdPage(ad, ad['Url'])
     print(ad)
