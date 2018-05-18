@@ -14,4 +14,4 @@ services:
     environment:
       MONGODB_USER: root
       MONGODB_PASS: root
-      MONGODB_DATABASE: bfNotifier
+      MONGODB_DATABASE: bf-notifier

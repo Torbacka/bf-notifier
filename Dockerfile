@@ -1,4 +1,4 @@
 FROM python:3
-ADD . /bfNotifier
-RUN pip3 install -r ./bfNotifier/requirements.txt
-CMD [ "python3", "./bfNotifier/crawler.py" ]
+ADD . /bf-notifier
+RUN pip3 install -r ./bf-notifier/requirements.txt
+CMD [ "python3", "./bf-notifier/crawler.py" ]

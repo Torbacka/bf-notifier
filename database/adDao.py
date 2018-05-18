@@ -11,11 +11,11 @@ client = MongoClient('mongodb://mongodb:27017',
 
 
 def insertAd(ad):
-    collection = client['bfNotifier']['ads']
+    collection = client['bf-notifier']['ads']
     collection.replace_one({'Lägenhetsnummer': ad['Lägenhetsnummer'], 'AnnonsId': ad['AnnonsId']}, ad, upsert=True)
 
 
 def retrieveAll():
-    collection = client['bfNotifier']['ads']
+    collection = client['bf-notifier']['ads']
     return collection.find()
 
