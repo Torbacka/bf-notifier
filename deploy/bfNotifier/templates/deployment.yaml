@@ -1,0 +1,42 @@
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: {{ template "fullname" . }}
+  labels:
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}"
+spec:
+  schedule: "0 3,17 * * *" # 03:00 every Monday
+  concurrencyPolicy: Forbid
+  startingDeadlineSeconds: 60
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+          - name: "{{ .Chart.Name }}"
+            image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+            imagePullPolicy: {{ .Values.image.pullPolicy }}
+            readinessProbe:
+              exec:
+                command:
+                - "true"
+            livenessProbe:
+              exec:
+                command:
+                - "true"
+            env:
+            - name: USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: sec-bf-notifier-key
+                  key: username
+            - name: PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: sec-bf-notifier-key
+                  key: password
+          restartPolicy: Never
+          successfulJobsHistoryLimit: 0
+          failedJobsHistoryLimit: 1
+          resources:
+{{ toYaml .Values.resources | indent 12 }}
