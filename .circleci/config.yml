@@ -1,6 +1,5 @@
 version: 2
 jobs:
-
   docker-build:
       docker:
         - image: docker:17.07.0   # (1)
@@ -73,7 +72,7 @@ workflows:
       - gcloud-deploy:
           context: org-global
           requires:
-            - docker-build
+            - docker-
           filters:
             branches:
               only: master
