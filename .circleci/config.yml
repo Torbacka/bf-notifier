@@ -1,6 +1,6 @@
 version: 2
 jobs:
-  docker-build:
+  build:
       docker:
         - image: docker:17.07.0   # (1)
       working_directory: ~/workdir
@@ -64,7 +64,7 @@ workflows:
   version: 2
   build_and_deploy:
     jobs:
-      - docker-build:
+      - build:
           context: org-global
           filters:
             branches:
