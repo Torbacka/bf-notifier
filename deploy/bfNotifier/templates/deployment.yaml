@@ -26,15 +26,12 @@ spec:
                 - "true"
             env:
             - name: USERNAME
-              valueFrom:
-                secretKeyRef:
-                  name: sec-bf-notifier-key
-                  key: username
+              value: {{ .Values.env.username }}
             - name: PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: sec-bf-notifier-key
-                  key: password
+                  name: dev-play-mongodb-mongodb
+                  key: mongodb-root-password
           restartPolicy: Never
           successfulJobsHistoryLimit: 0
           failedJobsHistoryLimit: 1

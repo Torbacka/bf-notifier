@@ -5,7 +5,7 @@ from pymongo import MongoClient
 username = os.getenv('USERNAME')
 password = os.getenv('PASSWORD')
 
-client = MongoClient('mongodb://mongodb:27017',
+client = MongoClient('mongodb://dev-play-mongodb-mongodb:27017',
                      username=username,
                      password=password)
 

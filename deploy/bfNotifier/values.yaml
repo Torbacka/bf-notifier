@@ -14,3 +14,4 @@ resources:
     cpu: 200m
     memory: 128Mi
 env:
+  username: root
