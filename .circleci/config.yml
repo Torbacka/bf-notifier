@@ -1,18 +1,18 @@
 version: 2
 jobs:
   build:
-      docker:
-        - image: docker:17.07.0   # (1)
-      working_directory: ~/workdir
-      steps:
-        - checkout
-        - setup_remote_docker
-        - run: chmod -v +x .circleci/*.sh
-        - run: sh .circleci/docker-build.sh
-        - persist_to_workspace:
-            root: /tmp/workspace/
-            paths:
-              - latest
+    docker:
+      - image: docker:17.07.0   # (1)
+    working_directory: ~/workdir
+    steps:
+      - checkout
+      - setup_remote_docker
+      - run: chmod -v +x .circleci/*.sh
+      - run: sh .circleci/docker-build.sh
+      - persist_to_workspace:
+          root: /tmp/workspace/
+          paths:
+            - latest
 
 
   gcloud-deploy:
@@ -66,13 +66,13 @@ workflows:
     jobs:
       - build:
           context: org-global
-          filters:
+          filters:git
             branches:
               only: master
       - gcloud-deploy:
           context: org-global
           requires:
-            - docker-
+            - build
           filters:
             branches:
               only: master
