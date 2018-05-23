@@ -11,14 +11,8 @@ def main():
         executor.map(addAds, ads)
 
 
-def addOldAds(i):
-    ad = parser.parseAdPage(dict(), "Lista/Details/?aid=" + i)
-    adDao.insertAd(ad)
-
-
 def addAds(ad):
     ad = parser.parseAdPage(ad, ad['Url'])
-    print(ad)
     adDao.insertAd(ad)
 
 
