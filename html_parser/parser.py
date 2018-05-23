@@ -15,8 +15,10 @@ def parseListPage():
 # parse ad page and returning a data structure containing information about the ad
 # queue time, type of ad, publish date, expire date, price, location, rent, number of rooms, living space
 def parseAdPage(ret, url):
-    ret = updateJson(ret)
+    if bool(ret):
+        ret = updateJson(ret)
     url = "https://bostad.stockholm.se" + url
+    print(url)
     response = urlopen(url)
     html = response.read()
     soup = BeautifulSoup(html, 'html.parser')
@@ -29,11 +31,13 @@ def parseAdPage(ret, url):
             key = fixKey(n)
             ret[key] = parseValue(key, v.text.strip())
 
-    statisticSoup = soup.find("div", {"id": "statistik-box"})
-    queueTimes = statisticSoup.find_all('strong')
+    statistic_soup = soup.find("div", {"id": "statistik-box"})
+    queue_times = []
+    if statistic_soup is not None:
+        queue_times = statistic_soup.find_all('strong')
 
     queue = []
-    for queueTime in queueTimes:
+    for queueTime in queue_times:
         queue.append(datetime.strptime(queueTime.text, '%Y-%m-%d'))
     ret["Queue"] = queue
     adType = soup.find("span", attrs={'class': 'm-tag'})
