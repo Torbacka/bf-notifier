@@ -4,8 +4,8 @@ from pymongo import MongoClient
 
 username = os.getenv('USERNAME')
 password = os.getenv('PASSWORD')
-
-client = MongoClient('mongodb://dev-play-mongodb-mongodb:27017',
+url = os.getenv('URL')
+client = MongoClient('mongodb://{0}:27017'.format(url),
                      username=username,
                      password=password)
 

@@ -27,6 +27,8 @@ spec:
             env:
             - name: USERNAME
               value: {{ .Values.env.username }}
+            - name: URL
+              value: {{ .Values.env.url }}
             - name: PASSWORD
               valueFrom:
                 secretKeyRef:
