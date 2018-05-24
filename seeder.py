@@ -14,6 +14,8 @@ def main():
 def add_old_ads(i):
     ad = parser.parseAdPage(dict(), "/Lista/Details/?aid=" + str(i))
     ad['AnnonsId'] = i
+    if i % 5000 == 0:
+        print("Processed : " + str(i))
     if bool(ad):
         adDao.insertAd(ad)
 

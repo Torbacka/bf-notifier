@@ -67,4 +67,4 @@ spec:
       restartPolicy: Never
       backoffLimit: 4
       resources:
-{{ toYaml .Values.resources | indent 12 }}
+{{ toYaml .Values.seedResources | indent 12 }}

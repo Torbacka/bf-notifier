@@ -18,7 +18,6 @@ def parseAdPage(ret, url):
     if bool(ret):
         ret = updateJson(ret)
     url = "https://bostad.stockholm.se" + url
-    print(url)
     response = urlopen(url)
     html = response.read()
     soup = BeautifulSoup(html, 'html.parser')
