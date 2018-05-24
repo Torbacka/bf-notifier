@@ -5,7 +5,7 @@ metadata:
   labels:
     chart: "{{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}"
 spec:
-  schedule: "0 3,17 * * *" # 03:00 every Monday
+  schedule: "0 3,17 * * *" # 03:00 and 17 every day
   concurrencyPolicy: Forbid
   startingDeadlineSeconds: 60
   jobTemplate:
@@ -38,4 +38,33 @@ spec:
           successfulJobsHistoryLimit: 0
           failedJobsHistoryLimit: 1
           resources:
+{{ toYaml .Values.resources | indent 12 }}
+
+---
+
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: "{{ template "fullname" . }}-seeder"
+spec:
+  template:
+    spec:
+      containers:
+      - name: "{{ .Chart.Name }}"
+        image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+        imagePullPolicy: {{ .Values.image.pullPolicy }}
+        args: ["python3", "./bf-notifier/seeder.py"]
+      env:
+      - name: USERNAME
+        value: {{ .Values.env.username }}
+      - name: URL
+        value: {{ .Values.env.url }}
+      - name: PASSWORD
+        valueFrom:
+          secretKeyRef:
+            name: dev-play-mongodb-mongodb
+            key: mongodb-root-password
+      restartPolicy: Never
+      backoffLimit: 4
+      resources:
 {{ toYaml .Values.resources | indent 12 }}

@@ -13,6 +13,13 @@ resources:
   requests:
     cpu: 200m
     memory: 128Mi
+seedResources:
+  limits:
+    cpu: 1000m
+    memory: 2048Mi
+  requests:
+    cpu: 1000m
+    memory: 2048Mi
 env:
   username: root
   url: dev-play-mongodb-mongodb
