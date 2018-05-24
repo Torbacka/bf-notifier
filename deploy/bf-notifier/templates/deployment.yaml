@@ -66,5 +66,3 @@ spec:
             key: mongodb-root-password
       restartPolicy: Never
       backoffLimit: 4
-      resources:
-{{ toYaml .Values.seedResources | indent 12 }}
