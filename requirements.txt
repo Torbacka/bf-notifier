@@ -1,3 +1,4 @@
+requests
 beautifulsoup4==4.6.0
 pymongo==3.6.1
 urlopen==1.0.0
