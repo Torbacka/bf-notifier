@@ -39,30 +39,3 @@ spec:
           failedJobsHistoryLimit: 1
           resources:
 {{ toYaml .Values.resources | indent 12 }}
-
----
-
-apiVersion: batch/v1
-kind: Job
-metadata:
-  name: "{{ template "fullname" . }}-seeder"
-spec:
-  template:
-    spec:
-      containers:
-      - name: "{{ .Chart.Name }}"
-        image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
-        imagePullPolicy: {{ .Values.image.pullPolicy }}
-        args: ["python3", "./bf-notifier/seeder.py"]
-      env:
-      - name: USERNAME
-        value: {{ .Values.env.username }}
-      - name: URL
-        value: {{ .Values.env.url }}
-      - name: PASSWORD
-        valueFrom:
-          secretKeyRef:
-            name: dev-play-mongodb-mongodb
-            key: mongodb-root-password
-      restartPolicy: Never
-      backoffLimit: 4
