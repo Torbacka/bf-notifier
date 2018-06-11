@@ -10,12 +10,15 @@ client = MongoClient('mongodb://{0}:27017'.format(url),
                      password=password)
 
 
-def insertAd(ad):
+def insert_ad(ad):
     collection = client['bf-notifier']['ads']
     collection.replace_one({'Lägenhetsnummer': ad['Lägenhetsnummer'], 'AnnonsId': ad['AnnonsId']}, ad, upsert=True)
 
 
-def retrieveAll():
+def retrieve(ad_filter):
     collection = client['bf-notifier']['ads']
-    return collection.find()
+    return collection.find(ad_filter)
 
+
+def retrieve_all():
+    return retrieve({})

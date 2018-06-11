@@ -13,7 +13,7 @@ def main():
 
 def addAds(ad):
     ad = parser.parseAdPage(ad, ad['Url'])
-    adDao.insertAd(ad)
+    adDao.insert_ad(ad)
 
 
 if __name__ == "__main__":
