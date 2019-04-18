@@ -2,7 +2,7 @@ import datetime
 import os
 import requests
 
-from database import adDao
+from database import ad_dao
 
 mailgun_url = os.getenv("MAILGUN_URL")
 api_key = os.getenv("API_KEY")
@@ -15,7 +15,7 @@ def notify():
 
 def get_ads():
     min_date = datetime.datetime(2014, 1, 1, 0, 0, 0)
-    return adDao.retrieve({
+    return ad_dao.retrieve({
         "$and:": [
             {"Queue": {"$elemMatch": {"$lt": min_date}}},
             {"Type": {"$nin": ["Student"]}}

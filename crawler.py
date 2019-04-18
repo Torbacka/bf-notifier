@@ -1,19 +1,19 @@
 from concurrent.futures import ThreadPoolExecutor
 
 from html_parser import parser
-from database import adDao
+from database import ad_dao
 
 
 def main():
     # print("html_parser")
-    ads = parser.parseListPage()
+    ads = parser.parse_list_page()
     with ThreadPoolExecutor(max_workers=20) as executor:
-        executor.map(addAds, ads)
+        executor.map(add_ads, ads)
 
 
-def addAds(ad):
-    ad = parser.parseAdPage(ad, ad['Url'])
-    adDao.insert_ad(ad)
+def add_ads(ad):
+    ad = parser.parse_ad_page(ad, ad['Url'])
+    ad_dao.insert_ad(ad)
 
 
 if __name__ == "__main__":

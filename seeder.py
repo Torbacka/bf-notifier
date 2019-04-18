@@ -1,6 +1,6 @@
 from concurrent.futures import ThreadPoolExecutor
 
-from database import adDao
+from database import ad_dao
 from html_parser import parser
 
 
@@ -12,12 +12,12 @@ def main():
 
 
 def add_old_ads(i):
-    ad = parser.parseAdPage(dict(), "/Lista/Details/?aid=" + str(i))
+    ad = parser.parse_ad_page(dict(), "/Lista/Details/?aid=" + str(i))
     ad['AnnonsId'] = i
     if i % 5000 == 0:
         print("Processed : " + str(i))
     if bool(ad):
-        adDao.insert_ad(ad)
+        ad_dao.insert_ad(ad)
 
 
 if __name__ == "__main__":
