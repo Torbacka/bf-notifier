@@ -23,7 +23,7 @@ def get_ads():
     })
 
 
-def mail(recipient, message):
+def mailgun(recipient, message):
     requests.post(mailgun_url, auth=("api", api_key), data={
         'from': 'bf-notifier@torbacka.se',
         'to': recipient,

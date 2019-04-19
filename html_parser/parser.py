@@ -15,40 +15,52 @@ def parse_list_page():
 
 # parse ad page and returning a data structure containing information about the ad
 # queue time, type of ad, publish date, expire date, price, location, rent, number of rooms, living space
-def parse_ad_page(ret, url):
-    if bool(ret):
-        ret = update_json(ret)
+def parse_ad_page(ad_data, url, html):
+    if bool(ad_data):
+        ad_data = convert_to_datetime(ad_data)
     url = "https://bostad.stockholm.se" + url
-    response = urlopen(url)
-    html = response.read()
+    ad_data['Page'] = url
     soup = BeautifulSoup(html, 'html.parser')
+
+    # Update the dict with all the data from the class tag "egenskap"
+    ad_data.update(extract_all_characteristics(ad_data, soup))
+    # Update the queue information if it exist
+    ad_data["Queue"] = extract_queue_data(soup.find("div", {"id": "statistik-box"}))
+    # Update the ad type if it exist
+    ad_data['Type'] = extract_ad_type(soup.find("span", attrs={'class': 'm-tag'}))
+    return ad_data
+
+
+def extract_ad_type(ad_type):
+    if ad_type is not None:
+        return ad_type.text
+    else:
+        return ""
+
+
+def extract_all_characteristics(soup):
+    ad_data = dict()
     all_characteristics = soup.find_all('div', class_="egenskap")
-    ret['Page'] = url
     for characteristics in all_characteristics:
         n = characteristics.find('div', attrs={'class': 'n'})
         v = characteristics.find('div', attrs={'class': 'v'})
         if n is not None:
             key = fix_key(n)
-            ret[key] = parse_value(key, v.text.strip())
+            ad_data[key] = parse_value(key, v.text.strip())
+    return ad_data
 
-    statistic_soup = soup.find("div", {"id": "statistik-box"})
+
+def extract_queue_data(statistic_soup):
     queue_times = []
     if statistic_soup is not None:
         queue_times = statistic_soup.find_all('strong')
-
     queue = []
     for queueTime in queue_times:
         queue.append(datetime.strptime(queueTime.text, '%Y-%m-%d'))
-    ret["Queue"] = queue
-    ad_type = soup.find("span", attrs={'class': 'm-tag'})
-    if ad_type is not None:
-        ret['Type'] = ad_type.text
-    else:
-        ret['Type'] = ""
-    return ret
+    return queue
 
 
-def update_json(json_dict):
+def convert_to_datetime(json_dict):
     json_dict['AnnonseradTill'] = datetime.strptime(json_dict['AnnonseradTill'], '%Y-%m-%d')
     json_dict['AnnonseradFran'] = datetime.strptime(json_dict['AnnonseradFran'], '%Y-%m-%d')
     return json_dict

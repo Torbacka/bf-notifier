@@ -1,3 +1,5 @@
+pypeln
+aiohttp
 requests
 beautifulsoup4==4.7.1
 pymongo==3.7.2
