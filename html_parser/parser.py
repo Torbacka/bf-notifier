@@ -19,15 +19,17 @@ def parse_ad_page(ad_data, url, html):
     if bool(ad_data):
         ad_data = convert_to_datetime(ad_data)
     url = "https://bostad.stockholm.se" + url
-    ad_data['Page'] = url
+    ad_data['url'] = url
     soup = BeautifulSoup(html, 'html.parser')
-
+    information_text = soup.find("strong", attrs={'class': 'error'})
+    if information_text is not None:
+        ad_data['information'] = ""
     # Update the dict with all the data from the class tag "egenskap"
     ad_data.update(extract_all_characteristics(ad_data, soup))
     # Update the queue information if it exist
-    ad_data["Queue"] = extract_queue_data(soup.find("div", {"id": "statistik-box"}))
+    ad_data["queue"] = extract_queue_data(soup.find("div", {"id": "statistik-box"}))
     # Update the ad type if it exist
-    ad_data['Type'] = extract_ad_type(soup.find("span", attrs={'class': 'm-tag'}))
+    ad_data['type'] = extract_ad_type(soup.find("span", attrs={'class': 'm-tag'}))
     return ad_data
 
 
@@ -61,8 +63,8 @@ def extract_queue_data(statistic_soup):
 
 
 def convert_to_datetime(json_dict):
-    json_dict['AnnonseradTill'] = datetime.strptime(json_dict['AnnonseradTill'], '%Y-%m-%d')
-    json_dict['AnnonseradFran'] = datetime.strptime(json_dict['AnnonseradFran'], '%Y-%m-%d')
+    json_dict['advertisedTo'] = datetime.strptime(json_dict['advertisedTo'], '%Y-%m-%d')
+    json_dict['advertisedFrom'] = datetime.strptime(json_dict['advertisedFrom'], '%Y-%m-%d')
     return json_dict
 
 
