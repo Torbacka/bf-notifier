@@ -1,5 +1,6 @@
 import datetime
 import os
+
 import requests
 
 from database import ad_dao

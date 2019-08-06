@@ -1,7 +1,7 @@
 from concurrent.futures import ThreadPoolExecutor
 
-from html_parser import parser
 from database import ad_dao
+from html_parser import parser
 
 
 def main():
