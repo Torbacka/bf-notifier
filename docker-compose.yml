@@ -10,7 +10,11 @@ services:
     depends_on:
       - mongodb
   mongodb:
-    image: tutum/mongodb:3.2
+    image: mongodb:4.2.0
+    volumes:
+    - /data/db:/data/db
+    ports:
+    - "27017:27017"
     environment:
       MONGODB_USER: root
       MONGODB_PASS: root

@@ -12,7 +12,7 @@ def main():
 
 
 def add_ads(ad):
-    ad = parser.parse_ad_page(ad, ad['Url'])
+    ad = parser.parse_ad_page(ad, f"https://bostad.stockholm.se/${ad['Url']}")
     ad_dao.insert_ad(ad)
 
 
