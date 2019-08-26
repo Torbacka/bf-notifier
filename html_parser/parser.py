@@ -20,19 +20,29 @@ def parse_list_page():
 # parse ad page and returning a data structure containing information about the ad
 # queue time, type of ad, publish date, expire date, price, location, rent, number of rooms, living space
 def parse_ad_page(ad_data, url, html):
+    if html == 'The page cannot be displayed because an internal server error has occurred.':
+        return None
     if bool(ad_data):
         ad_data = convert_to_datetime(ad_data)
     ad_data['url'] = url
+    ad_data['adId'] = url.split("=")[1]
     soup = BeautifulSoup(html, 'html.parser')
     # Update the dict with all the data from the class tag "egenskap"
     ad_data.update(extract_all_characteristics(soup))
     # Update the queue information if it exist
     ad_data["queue"] = extract_queue_data(soup.find("div", {"id": "statistik-box"}))
     extract_information_text(ad_data, soup)
-    ad_data['apartmentInfo'] = [info.text for info in soup.find("div", {'class': 'inner colBox'}).findAll('li')]
+    ad_data['apartmentInfo'] = extract_apartmentInfo(soup)
     # Update the ad type if it exist
     ad_data['type'] = extract_ad_type(soup.find("span", attrs={'class': 'm-tag'}))
     return ad_data
+
+
+def extract_apartmentInfo(soup):
+    col_box = soup.find("div", {'class': 'inner colBox'})
+    if col_box is None:
+        return []
+    return [info.text for info in col_box.findAll('li')]
 
 
 def extract_information_text(ad_data, soup):
