@@ -25,7 +25,10 @@ def parse_ad_page(ad_data, url, html):
     if bool(ad_data):
         ad_data = convert_to_datetime(ad_data)
     ad_data['url'] = url
-    ad_data['adId'] = url.split("=")[1]
+    adId = url.split("=")[1]
+    if int(adId) % 500 == 0:
+        print(adId)
+    ad_data['adId'] = adId
     soup = BeautifulSoup(html, 'html.parser')
     # Update the dict with all the data from the class tag "egenskap"
     ad_data.update(extract_all_characteristics(soup))
